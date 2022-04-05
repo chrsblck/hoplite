@@ -15,13 +15,14 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.TestContainerExtension
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.testcontainers.containers.localstack.LocalStackContainer
 import org.testcontainers.utility.DockerImageName
 
-class SecretsManagerPreprocessorTest : FunSpec() {
+class AwsSecretsManagerPreprocessorTest : FunSpec() {
 
-  private val localstackImage = DockerImageName.parse("localstack/localstack:0.14.1")
+  private val localstackImage = DockerImageName.parse("localstack/localstack:0.14.2")
   private val localstack = LocalStackContainer(localstackImage).withServices(LocalStackContainer.Service.SECRETSMANAGER)
 
   init {
@@ -47,6 +48,11 @@ class SecretsManagerPreprocessorTest : FunSpec() {
     test("unknown secret should return error and include key") {
       AwsSecretsManagerPreprocessor { client }.process(StringNode("secretsmanager://unkunk", Pos.NoPos, DotPath.root))
         .shouldBeInstanceOf<Validated.Invalid<ConfigFailure>>().error.description().shouldContain("unkunk")
+    }
+
+    test("unknown secret should return error and not include prefix") {
+      AwsSecretsManagerPreprocessor { client }.process(StringNode("secretsmanager://unkunk", Pos.NoPos, DotPath.root))
+        .shouldBeInstanceOf<Validated.Invalid<ConfigFailure>>().error.description().shouldNotContain("secretsmanager://")
     }
 
     test("multiple errors should be returned at once") {

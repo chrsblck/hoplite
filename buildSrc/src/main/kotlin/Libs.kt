@@ -15,7 +15,7 @@ object Libs {
   }
 
   object Aws {
-    private const val version = "1.12.181"
+    private const val version = "1.12.189"
     const val core = "com.amazonaws:aws-java-sdk-core:$version"
     const val ssm = "com.amazonaws:aws-java-sdk-ssm:$version"
     const val secrets = "com.amazonaws:aws-java-sdk-secretsmanager:$version"
@@ -44,7 +44,7 @@ object Libs {
   }
 
   object Kotest {
-    private const val version = "5.2.1"
+    private const val version = "5.2.2"
     const val assertions = "io.kotest:kotest-assertions-core-jvm:$version"
     const val junit5 = "io.kotest:kotest-runner-junit5-jvm:$version"
     const val testContainers = "io.kotest.extensions:kotest-extensions-testcontainers:1.2.1"
